@@ -1,4 +1,6 @@
-﻿using IMSWebPortal.Data.Models.Identity;
+﻿using IMSWebPortal.Data.Models.Email;
+using IMSWebPortal.Data.Models.Identity;
+using IMSWebPortal.Data.Models.Inventory;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,5 +15,9 @@ namespace IMSWebPortal.Data
             : base(options)
         {
         }
+
+        public DbSet<EmailDetail> EmailDetails { get; set; }
+
+        public DbSet<ItemDetail> ItemDetails { get; set; }
     }
 }
