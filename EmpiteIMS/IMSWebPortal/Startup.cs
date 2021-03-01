@@ -39,7 +39,6 @@ namespace IMSWebPortal
 
             services.AddIdentity<AppUser, AppRole>(options =>
             {
-                options.Password.RequiredLength = 4;
                 options.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders()
