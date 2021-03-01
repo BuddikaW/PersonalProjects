@@ -1,8 +1,7 @@
 ﻿@page
-@model IndexModel
+@model IMSWebPortal.Pages.User.UserDetailsModel
 @{
     ViewData["Title"] = "Profile";
-    ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
 <h4>@ViewData["Title"]</h4>
@@ -25,16 +24,6 @@
                 <input asp-for="Input.LastName" class="form-control" />
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.IsEnabled"></label>
-                <input asp-for="Input.IsEnabled" class="form-control" />
-                <span asp-validation-for="Input.IsEnabled" class="text-danger"></span>
-            </div>*@
             <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>
