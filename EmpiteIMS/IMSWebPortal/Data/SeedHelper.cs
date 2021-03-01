@@ -1,7 +1,11 @@
-﻿using IMSWebPortal.Data.Models.Identity;
+﻿using IMSWebPortal.Data.Models.Email;
+using IMSWebPortal.Data.Models.Identity;
+using IMSWebPortal.Data.Models.Inventory;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IMSWebPortal.Data
@@ -10,11 +14,6 @@ namespace IMSWebPortal.Data
     {
         private static IDataProtector _protector;
 
-        public static String Encript(string input)
-        {
-            return _protector.Protect(input);
-        }
-
         public static async Task Initialize(ApplicationDbContext context, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IDataProtectionProvider provider)
         {
             _protector = provider.CreateProtector("empite");
@@ -22,8 +21,9 @@ namespace IMSWebPortal.Data
             context.Database.EnsureCreated();
 
             if((await CreateRoles(roleManager)) && (await CreateSuperAdmin(userManager))){
+                var emailAddedStatus = SetEmailDetails(context);
                 var userAddedStatus = await CreateTestUsers(userManager);
-                var itemAddedStatus = await CreateTestItems();
+                var itemAddedStatus = CreateTestItems(context);
             }
         }
 
@@ -96,6 +96,28 @@ namespace IMSWebPortal.Data
             }
         }
 
+        public static bool SetEmailDetails(ApplicationDbContext context)
+        {
+            try
+            {
+                if (!context.EmailDetails.Any())
+                {
+                    var email = new EmailDetail();
+                    email.Port = 587;
+                    email.Host = "smtp.gmail.com";
+                    email.UserName = "project.bkw@gmail.com";
+                    email.Password = "projectBkw!";
+                    context.EmailDetails.Add(email);
+                    context.SaveChanges();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public static async Task<bool> CreateTestUsers(UserManager<AppUser> userManager)
         {
             try
@@ -126,17 +148,58 @@ namespace IMSWebPortal.Data
             }
         }
 
-        public static async Task<bool> CreateTestItems()
+        public static bool CreateTestItems(ApplicationDbContext context)
         {
             try
             {
+                if (!context.ItemDetails.Any())
+                {
+                    var itemList = new List<ItemDetail>();
+
+                    var item1 = new ItemDetail();
+                    item1.Name = "Triangle Ruler";
+                    item1.Price = Convert.ToDecimal("23.50");
+                    item1.Qty = 200;
+                    itemList.Add(item1);
+
+                    var item2 = new ItemDetail();
+                    item2.Name = "HB Pencil";
+                    item2.Price = Convert.ToDecimal("17.00");
+                    item2.Qty = 300;
+                    itemList.Add(item2);
+
+                    var item3 = new ItemDetail();
+                    item3.Name = "Drawing Board";
+                    item3.Price = Convert.ToDecimal("50.00");
+                    item3.Qty = 800;
+                    itemList.Add(item3);
+
+                    var item4 = new ItemDetail();
+                    item4.Name = "Fabric Paint";
+                    item4.Price = Convert.ToDecimal("130.00");
+                    item4.Qty = 70;
+                    itemList.Add(item4);
+
+                    var item5 = new ItemDetail();
+                    item5.Name = "Mapped Eraser";
+                    item5.Price = Convert.ToDecimal("90.50");
+                    item5.Qty = 120;
+                    itemList.Add(item5);
+
+                    context.ItemDetails.AddRange(itemList);
+                    context.SaveChanges();
+                }
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
         }
 
+        public static String Encript(string input)
+        {
+            return _protector.Protect(input);
+        }
     }
 }
