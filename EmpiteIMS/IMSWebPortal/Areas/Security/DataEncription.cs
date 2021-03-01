@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IMSWebPortal.Data.Models.Security
+namespace IMSWebPortal.Areas.Security
 {
     public class DataEncription
     {
