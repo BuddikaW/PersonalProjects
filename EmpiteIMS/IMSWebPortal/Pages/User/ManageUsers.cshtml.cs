@@ -42,6 +42,9 @@ namespace IMSWebPortal.Pages.User
 
         public class UserDetailModel
         {
+            [Display(Name = "Id")]
+            public int Id { get; set; }
+
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
@@ -78,6 +81,7 @@ namespace IMSWebPortal.Pages.User
             foreach(var userProfile in allUsers)
             {
                 var userDetail = new UserDetailModel();
+                userDetail.Id = userProfile.Id;
                 userDetail.FirstName = Decript(userProfile.FirstName);
                 userDetail.LastName = Decript(userProfile.LastName);
                 userDetail.Username = userProfile.UserName;

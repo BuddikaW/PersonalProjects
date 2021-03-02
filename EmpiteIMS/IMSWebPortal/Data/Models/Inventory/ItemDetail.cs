@@ -16,5 +16,6 @@ namespace IMSWebPortal.Data.Models.Inventory
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
         public int Qty { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
