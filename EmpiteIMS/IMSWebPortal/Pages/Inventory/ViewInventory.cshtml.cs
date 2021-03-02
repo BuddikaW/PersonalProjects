@@ -40,8 +40,11 @@ namespace IMSWebPortal.Pages.Inventory
             [Display(Name = "Id")]
             public int Id { get; set; }
 
-            [Display(Name = "Name")]
+            [Display(Name = "Item Name")]
             public string Name { get; set; }
+
+            [Display(Name = "Sku")]
+            public string Sku { get; set; }
 
             [Display(Name = "Price")]
             public decimal Price { get; set; }
@@ -73,6 +76,7 @@ namespace IMSWebPortal.Pages.Inventory
                 var itemRecord = new ItemDetailsModel();
                 itemRecord.Id = itemData.Id;
                 itemRecord.Name = itemData.Name;
+                itemRecord.Sku = itemData.Sku;
                 itemRecord.Price = itemData.Price;
                 itemRecord.Qty = itemData.Qty;
                 itemRecord.IsDeleted = false;

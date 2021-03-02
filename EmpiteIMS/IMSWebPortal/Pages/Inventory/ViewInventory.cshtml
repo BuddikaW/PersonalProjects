@@ -24,27 +24,29 @@
                 <table id="ItemListTable" class="oktable">
                     <thead>
                         <tr>
-                            <th>Item Name</th>
-                            <th>Price</th>
-                            <th>Qty</th>
+                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Name)</th>
+                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Sku)</th>
+                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Price)</th>
+                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Qty)</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var itemRecord in Model.ItemDetils)
                         {
-                            <tr>
-                                <td>@Html.DisplayFor(e => itemRecord.Name)</td>
-                                <td>@Html.DisplayFor(e => itemRecord.Price)</td>
-                                <td>@Html.DisplayFor(e => itemRecord.Qty)</td>
-                                <td>
-                                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-                                    {
-                                        <button class="btn btn-primary right actionbtn deletebtn" onclick="DeleteItem(@itemRecord.Id)">Delete</button>
-                                        <button class="btn btn-primary right actionbtn editbtn" onclick="EditItem(@itemRecord.Id)">Edit</button>
-                                    }
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>@Html.DisplayFor(e => itemRecord.Name)</td>
+                            <td>@Html.DisplayFor(e => itemRecord.Sku)</td>
+                            <td>@Html.DisplayFor(e => itemRecord.Price)</td>
+                            <td>@Html.DisplayFor(e => itemRecord.Qty)</td>
+                            <td>
+                                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                                {
+                                    <button class="btn btn-primary right actionbtn deletebtn" onclick="DeleteItem(@itemRecord.Id)">Delete</button>
+                                    <button class="btn btn-primary right actionbtn editbtn" onclick="EditItem(@itemRecord.Id)">Edit</button>
+                                }
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

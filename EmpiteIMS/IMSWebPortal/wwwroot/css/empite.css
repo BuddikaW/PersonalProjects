@@ -59,22 +59,22 @@ background-color: darkred;
     text-align: right;
 }
 
-#ItemListTable > thead > tr > th:nth-child(2),
 #ItemListTable > thead > tr > th:nth-child(3),
 #ItemListTable > thead > tr > th:nth-child(4),
-#ItemListTable > tbody > tr > td:nth-child(2),
+#ItemListTable > thead > tr > th:nth-child(5),
 #ItemListTable > tbody > tr > td:nth-child(3),
-#ItemListTable > tbody > tr > td:nth-child(4) {
-    text-align: right;
-}
-
-#ItemQtyUpdateTable > thead > tr > th:nth-child(2),
-#ItemQtyUpdateTable > tbody > tr > td:nth-child(2) {
+#ItemListTable > tbody > tr > td:nth-child(4),
+#ItemListTable > tbody > tr > td:nth-child(5) {
     text-align: right;
 }
 
 #ItemQtyUpdateTable > thead > tr > th:nth-child(3),
 #ItemQtyUpdateTable > tbody > tr > td:nth-child(3) {
+    text-align: right;
+}
+
+#ItemQtyUpdateTable > thead > tr > th:nth-child(4),
+#ItemQtyUpdateTable > tbody > tr > td:nth-child(4) {
     text-align: center;
 }
 

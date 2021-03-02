@@ -45,6 +45,10 @@ namespace IMSWebPortal.Pages.Inventory
             public string Name { get; set; }
 
             [Required]
+            [Display(Name = "Sku")]
+            public string Sku { get; set; }
+
+            [Required]
             [Display(Name = "Price")]
             //[RegularExpression(@"^\$?\d+(\.(\d{2}))?$", ErrorMessage = "Please enter a valid price")]
             [Range(0, 10000000000, ErrorMessage = "Please enter a valid price")]
@@ -68,7 +72,13 @@ namespace IMSWebPortal.Pages.Inventory
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var item = new ItemDetail { Name = Input.Name, Price = Input.Price, Qty = Input.Qty, IsDeleted = false };
+                if(_context.ItemDetails.Any(e => e.Sku == Input.Sku && e.IsDeleted == false))
+                {
+                    StatusMessage = "Error: Duplicate SKU value. Item with SKU #" + Input.Sku + " already exist.";
+                    return Page();
+                }
+
+                var item = new ItemDetail { Name = Input.Name, Sku = Input.Sku, Price = Input.Price, Qty = Input.Qty, IsDeleted = false };
 
                 _context.ItemDetails.Add(item);
                 _context.SaveChanges();
@@ -78,12 +88,8 @@ namespace IMSWebPortal.Pages.Inventory
                 StatusMessage = "New item added successfully";
 
                 return RedirectToPage();
-
-                //return LocalRedirect(returnUrl);
-                //return RedirectToPage("./ViewInventory");
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
     }

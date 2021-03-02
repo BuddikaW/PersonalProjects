@@ -13,6 +13,8 @@ namespace IMSWebPortal.Data.Models.Inventory
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        [Required]
+        public string Sku { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
         public int Qty { get; set; }

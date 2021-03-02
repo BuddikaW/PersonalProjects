@@ -6,7 +6,7 @@
 
 <h4>@ViewData["Title"]</h4>
 <partial name="./Shared/_StatusMessage" model="Model.StatusMessage" />
-<div class="row">
+<div id="UpdateQtyDiv" class="row">
     <div class="col-md-12">
 
         <form id="profile-form" method="post">
@@ -15,30 +15,32 @@
                 <table id="ItemQtyUpdateTable" class="oktable">
                     <thead>
                         <tr>
-                            <th>Item Name</th>
-                            <th>Price</th>
-                            <th>Qty</th>
+                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Name)</th>
+                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Sku)</th>
+                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Price)</th>
+                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Qty)</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var itemRecord in Model.ItemDetils)
                         {
-                            <tr>
-                                <td>@Html.DisplayFor(e => itemRecord.Name)</td>
-                                <td>@Html.DisplayFor(e => itemRecord.Price)</td>
-                                <td>
-                                    @Html.TextBoxFor(e => itemRecord.Qty, new { @id = "QtyBox_" + @itemRecord.Id, @type = "number", @min = "0", @class = "numberbox", @onkeyup = "CheckQty(this," + @itemRecord.Id + ")" })
-                                    <br />
-                                    <span id='QtyError_@itemRecord.Id' class="errorlable"></span>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>@Html.DisplayFor(e => itemRecord.Name)</td>
+                            <td>@Html.DisplayFor(e => itemRecord.Sku, new {@id = "Sku_" + @itemRecord.Id })</td>
+                            <td>@Html.DisplayFor(e => itemRecord.Price)</td>
+                            <td>
+                                @Html.TextBoxFor(e => itemRecord.Qty, new { @id = "QtyBox_" + @itemRecord.Id, @type = "number", @min = "0", @class = "numberbox", @onkeyup = "CheckQty(this," + @itemRecord.Id + ")" })
+                                <br />
+                                <span id='QtyError_@itemRecord.Id' class="errorlable"></span>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
             </dv>
 
             <div>
-                <button id="updateInvBtn" type="submit" class="btn btn-primary right savebtn">Update</button>
+                <button id="updateInvBtn" class="btn btn-primary right savebtn" v-on:click="UpdateQty">Update</button>
             </div>
 
         </form>
@@ -54,6 +56,68 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" asp-append-version="true"></script>
 
     <script>
+
+
+        var app = new Vue({
+
+            el: "#UpdateQtyDiv",
+            data: {},
+            methods: {
+                UpdateQty: function (e) {
+
+
+                    //var table = document.getElementById("ItemQtyUpdateTable");
+                    //var ItemDetils = [];
+                    //for (var r = 1; r < table.rows.length; r++) {
+                    //    var itemRecord = {};
+                    //    itemRecord.Id = 0;
+                    //    itemRecord.Name = table.rows[r].cells[0].innerHTML;
+                    //    itemRecord.Sku = table.rows[r].cells[1].innerHTML;
+                    //    itemRecord.Price = table.rows[r].cells[2].innerHTML;
+                    //    itemRecord.Qty = table.rows[r].cells[3].children[0].value;
+                    //    itemRecord.IsDeleted = 0;
+                    //    ItemDetils.push(itemRecord);
+                    //}
+
+                    var ItemDetils = [];
+                    var itemRecord = {};
+                    itemRecord.Id = 1;
+                    itemRecord.Name = "test";
+                    itemRecord.Sku = "sku";
+                    itemRecord.Price = 0.12;
+                    itemRecord.Qty = 50;
+                    itemRecord.IsDeleted = true;
+                    ItemDetils.push(itemRecord);
+
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '?handler=Submit',
+                        data: { itemDetailsModel: JSON.stringify(ItemDetils) },
+                        dataType: 'json',
+                        success: function (data) {
+                            debugger;
+                            if (data == true) {
+                                alert("Successfully created new user");
+                                location.reload();
+                            }
+                            else {
+                                alert("Save faild!");
+                            }
+                        },
+                        error: function (error) {
+                            alert("Error: " + error);
+                        }
+                    })
+
+
+                }
+            }
+
+        });
+
+
+
         function CheckQty(obj, id) {
             if (obj.value.indexOf(".") != -1) {
                 ValidateQty(true, id);
