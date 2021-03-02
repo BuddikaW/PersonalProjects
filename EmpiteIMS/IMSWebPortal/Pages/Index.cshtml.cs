@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,6 +18,7 @@ namespace IMSWebPortal.Pages
             _logger = logger;
         }
 
+        [Authorize(Roles = "Admin")]
         public void OnGet()
         {
 
