@@ -24,19 +24,19 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Item Details</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Inventory/ViewInventory">Item Details</a>
                             </li>
 
                             @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Add Items</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Inventory/NewItem">Add Items</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Update Inventory</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Inventory/UpdateQty">Update Inventory</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Send Report</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Inventory/SendReport">Send Report</a>
                                 </li>
                             }
 
