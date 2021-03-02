@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IMSWebPortal.Data;
 using IMSWebPortal.Data.Models.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace IMSWebPortal.Pages.Inventory
 {
+    [Authorize(Roles = "Admin,Manager")]
     public class UpdateQtyModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -88,52 +90,7 @@ namespace IMSWebPortal.Pages.Inventory
             return Page();
         }
 
-        public async Task<IActionResult> OnGetSubmit(List<ItemDetailsModel> itemDetailsModel)
-        {
-            try
-            {
-                if(itemDetailsModel.Count > 0)
-                {
-                    foreach (var itemData in ItemDetils)
-                    {
-                        var qty = itemData.Qty;
-
-                        if (qty >= 0)
-                        {
-                            var existingItem = _context.ItemDetails.Where(e => e.IsDeleted == false && e.Sku == itemData.Sku).FirstOrDefault();
-
-                            if (existingItem == null)
-                            {
-                                StatusMessage = "Error: Something went wrong!";
-                                return Page();
-                            }
-                            else
-                            {
-                                if (qty != existingItem.Qty)
-                                {
-                                    existingItem.Qty = qty;
-                                    _context.ItemDetails.Update(existingItem);
-                                    _context.SaveChanges();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                _logger.LogInformation("Item Qty Updated");
-
-                StatusMessage = "Item qty updated successfully";
-
-                return RedirectToPage();
-            }
-            catch(Exception ex)
-            {
-                StatusMessage = "Error: Something went wrong!";
-                return Page();
-            }
-        }
-
-        public async Task<IActionResult> OnPostAsyncxxx()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {

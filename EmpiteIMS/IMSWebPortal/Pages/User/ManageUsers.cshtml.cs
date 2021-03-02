@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace IMSWebPortal.Pages.User
 {
@@ -19,16 +20,19 @@ namespace IMSWebPortal.Pages.User
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly ILogger<ManageUsersModel> _logger;
         private readonly IDataProtector _protector;
 
         public ManageUsersModel(ApplicationDbContext context,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            IDataProtectionProvider provider)
+            IDataProtectionProvider provider, 
+            ILogger<ManageUsersModel> logger)
         {
             _context = context;
             _signInManager = signInManager;
             _userManager = userManager;
+            _logger = logger;
             _protector = provider.CreateProtector("empite");
         }
 
@@ -91,6 +95,41 @@ namespace IMSWebPortal.Pages.User
 
             UserDetails = userList;
 
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var userData in UserDetails)
+                {
+                    var userName = userData.Username;
+
+                    var existingUser = _context.Users.Where(e => e.UserName == userName).FirstOrDefault();
+
+                    if (existingUser == null)
+                    {
+                        StatusMessage = "Error: Something went wrong!";
+                        return Page();
+                    }
+                    else
+                    {
+                        if (userData.IsEnabled != existingUser.IsEnabled)
+                        {
+                            existingUser.IsEnabled = userData.IsEnabled;
+                            _context.Users.Update(existingUser);
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+
+                _logger.LogInformation("User Details Updated");
+
+                StatusMessage = "User details updated successfully";
+
+                return RedirectToPage();
+            }
             return Page();
         }
     }

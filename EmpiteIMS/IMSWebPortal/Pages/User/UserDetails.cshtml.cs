@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using IMSWebPortal.Data.Models.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IMSWebPortal.Pages.User
 {
+    [Authorize(Roles = "Admin,Manager,Viewer")]
     public class UserDetailsModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
