@@ -30,27 +30,42 @@ background-color: green;
 background-color: darkred;
 }
 
-#UserListTable {
-width: 100%;
-margin-top: 20px;
-margin-bottom: 20px;
+.oktable {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-#UserListTable > thead > tr > th {
-border-top: 1px solid;
-border-bottom: 1px solid;
-background-color: aquamarine;
-padding: 5px;
-}
+    .oktable > thead > tr > th {
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-color: darkgray;
+        background-color: aquamarine;
+        padding: 5px;
+    }
 
-#UserListTable > tbody > tr > td {
-border-top: 1px solid;
-border-bottom: 1px solid;
-padding: 5px;
-}
+    .oktable > tbody > tr > td {
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-color: darkgray;
+        padding: 5px;
+    }
 
-#UserListTable > thead > tr > th:last-child, #UserListTable > tbody > tr > td:last-child {
+#UserListTable > thead > tr > th:nth-child(4), #UserListTable > tbody > tr > td:nth-child(4) {
     text-align: center;
+}
+
+#UserListTable > thead > tr > th:nth-child(5), #UserListTable > tbody > tr > td:nth-child(5) {
+    text-align: right;
+}
+
+#ItemListTable > thead > tr > th:nth-child(2),
+#ItemListTable > thead > tr > th:nth-child(3),
+#ItemListTable > thead > tr > th:nth-child(4),
+#ItemListTable > tbody > tr > td:nth-child(2),
+#ItemListTable > tbody > tr > td:nth-child(3),
+#ItemListTable > tbody > tr > td:nth-child(4) {
+    text-align: right;
 }
 
 .left{
@@ -59,4 +74,24 @@ padding: 5px;
 
 .right{
     float: right;
+}
+
+.actionbtn{
+    margin-left: 5px;
+}
+
+.savebtn {
+    cursor: pointer;
+}
+
+.addbtn {
+    cursor: pointer;
+}
+
+.editbtn {
+    cursor: pointer;
+}
+
+.deletebtn {
+    cursor: pointer;
 }

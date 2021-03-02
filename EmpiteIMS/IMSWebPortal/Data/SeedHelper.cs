@@ -160,30 +160,35 @@ namespace IMSWebPortal.Data
                     item1.Name = "Triangle Ruler";
                     item1.Price = Convert.ToDecimal("23.50");
                     item1.Qty = 200;
+                    item1.IsDeleted = false;
                     itemList.Add(item1);
 
                     var item2 = new ItemDetail();
                     item2.Name = "HB Pencil";
                     item2.Price = Convert.ToDecimal("17.00");
                     item2.Qty = 300;
+                    item2.IsDeleted = false;
                     itemList.Add(item2);
 
                     var item3 = new ItemDetail();
                     item3.Name = "Drawing Board";
                     item3.Price = Convert.ToDecimal("50.00");
                     item3.Qty = 800;
+                    item3.IsDeleted = false;
                     itemList.Add(item3);
 
                     var item4 = new ItemDetail();
                     item4.Name = "Fabric Paint";
                     item4.Price = Convert.ToDecimal("130.00");
                     item4.Qty = 70;
+                    item4.IsDeleted = false;
                     itemList.Add(item4);
 
                     var item5 = new ItemDetail();
                     item5.Name = "Mapped Eraser";
                     item5.Price = Convert.ToDecimal("90.50");
                     item5.Qty = 120;
+                    item5.IsDeleted = false;
                     itemList.Add(item5);
 
                     context.ItemDetails.AddRange(itemList);

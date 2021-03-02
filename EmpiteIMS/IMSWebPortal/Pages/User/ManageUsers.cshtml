@@ -11,20 +11,21 @@
 
         <div class="row">
             <div class="col-md-12">
-                <button id="addNewUserBtn" type="button" class="btn btn-primary right">Add New User</button>
+                <button id="addNewUserBtn" class="btn btn-primary right addbtn">Add New User</button>
             </div>
         </div>
 
         <form id="profile-form" method="post">
 
             <dv>
-                <table id="UserListTable">
+                <table id="UserListTable" class="oktable">
                     <thead>
                         <tr>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
                             <th>Active Status</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,6 +36,7 @@
                             <td>@Html.DisplayFor(e => userDetail.LastName)</td>
                             <td>@Html.DisplayFor(e => userDetail.Username)</td>
                             <td>@Html.CheckBoxFor(e => userDetail.IsEnabled, new { @class = "togglebox" })</td>
+                            <td><button class="btn btn-primary right actionbtn editbtn" onclick="EditUser(@userDetail.)">Edit</button></td>
                         </tr>
                         }
                     </tbody>
@@ -42,7 +44,7 @@
             </dv>
 
             <div>
-                <button id="update-profile-button" type="submit" class="btn btn-primary right">Save</button>
+                <button id="update-profile-button" type="submit" class="btn btn-primary right savebtn">Save</button>
             </div>
 
         </form>
@@ -67,5 +69,4 @@
         })
 
     </script>
-
 }
