@@ -253,3 +253,8 @@ body {
     color:darkorange !important;
 }
 
+.recipientarea {
+    height: 300px !important;
+    color: #86837d;
+}
+
