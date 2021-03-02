@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using IMSWebPortal.Areas;
 using IMSWebPortal.Data;
 using IMSWebPortal.Data.Models.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -51,7 +52,22 @@ namespace IMSWebPortal.Pages.Inventory
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            var x = Input.RecipientList;
+            if(Input.RecipientList != "")
+            {
+                var emailList = Input.RecipientList.Split(',');
+
+                foreach(var email in emailList)
+                {
+                    var result = new EmailClient(_context).SendEmail("<html><body>Hi</body></html>", email);
+                }
+
+
+            }
+
+
+           
+            
+
             
 
             return Page();
