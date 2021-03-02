@@ -2,9 +2,12 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    color: #f1a739 !important;
+    font-size: 25px;
+    font-weight:bold;
 }
 
 /* Provide sufficient contrast against white background */
@@ -12,10 +15,14 @@ a {
   color: #0366d6;
 }
 
+.display-4 {
+    color: #f1a739;
+}
+
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -115,20 +122,24 @@ body {
         border-top: 1px solid;
         border-bottom: 1px solid;
         border-color: darkgray;
-        background-color: aquamarine;
+        background-color: #f1a739;
         padding: 5px;
     }
 
     .oktable > tbody > tr > td {
         border-top: 1px solid;
         border-bottom: 1px solid;
-        border-color: darkgray;
+        border-color: #e4e2de;
         padding: 5px;
     }
 
-#UserListTable > thead > tr > th:nth-child(4), #UserListTable > tbody > tr > td:nth-child(4) {
-    text-align: center;
-}
+    .oktable > thead > tr:hover, .oktable > tbody > tr:hover {
+        background-color: #fdfbf6;
+    }
+
+    #UserListTable > thead > tr > th:nth-child(4), #UserListTable > tbody > tr > td:nth-child(4) {
+        text-align: center;
+    }
 
 #UserListTable > thead > tr > th:nth-child(5), #UserListTable > tbody > tr > td:nth-child(5) {
     text-align: right;
@@ -183,7 +194,10 @@ body {
 
 .numberbox {
     text-align: left;
-    border-color: grey;
+    border: 1px solid #ecd193;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 50%;
 }
 
 .errorlable {
@@ -193,6 +207,7 @@ body {
 
 .uneditable {
     border: 0;
+    background-color:transparent;
 }
 
 .alignright{
@@ -210,4 +225,31 @@ body {
     .uneditable:active {
         border: 0 !important;
     }
+
+.linkfeel {
+    color: #0366d6 !important;
+    cursor: pointer !important;
+}
+
+    .linkfeel:hover {
+        color: #0056b3 !important;
+        text-decoration: underline !important;
+    }
+
+.logintext {
+    color: #f1a739;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+    .logintext:hover {
+        color: #ffaa2c;
+        text-decoration: none;
+    }
+
+.menuitem:hover{
+    font-weight:bold;
+    color:darkorange !important;
+}
 

@@ -15,20 +15,20 @@
                 <table id="ItemQtyUpdateTable" class="oktable">
                     <thead>
                         <tr>
-                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Name)</th>
-                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Sku)</th>
-                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Price)</th>
-                            <th>@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Qty)</th>
+                            <th width="35%">@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Name)</th>
+                            <th width="25%">@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Sku)</th>
+                            <th width="15%">@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Price)</th>
+                            <th width="25%">@Html.DisplayNameFor(e => Model.ItemDetils.FirstOrDefault().Qty)</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (int i=0; i<Model.ItemDetils.Count; i++)
                         {
                             <tr>
-                                <td>@Html.TextBoxFor(e => Model.ItemDetils[i].Name, new { @class = "uneditable", @readonly = "readonly" })</td>
-                                <td>@Html.TextBoxFor(e => Model.ItemDetils[i].Sku, new { @class = "uneditable", @readonly = "readonly" })</td>
-                                <td>@Html.TextBoxFor(e => Model.ItemDetils[i].Price, new { @class = "uneditable alignright", @readonly = "readonly" })</td>
-                                <td>
+                                <td width="35%">@Html.TextBoxFor(e => Model.ItemDetils[i].Name, new { @class = "uneditable", @readonly = "readonly" })</td>
+                                <td width="25%">@Html.TextBoxFor(e => Model.ItemDetils[i].Sku, new { @class = "uneditable", @readonly = "readonly" })</td>
+                                <td width="15%">@Html.TextBoxFor(e => Model.ItemDetils[i].Price, new { @class = "uneditable alignright", @readonly = "readonly" })</td>
+                                <td width="25%">
                                     @Html.TextBoxFor(e => Model.ItemDetils[i].Qty, new { @id = "QtyBox_" + @Model.ItemDetils[i].Id, @type = "number", @min = "0", @class = "numberbox", @onkeyup = "CheckQty(this," + @Model.ItemDetils[i].Id + ")" })
                                     <br />
                                     <span id='QtyError_@Model.ItemDetils[i].Id' class="errorlable"></span>

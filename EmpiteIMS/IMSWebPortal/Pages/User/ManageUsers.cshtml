@@ -36,7 +36,9 @@
                                 <td>@Html.TextBoxFor(e => Model.UserDetails[i].LastName, new { @class = "uneditable", @readonly = "readonly" })</td>
                                 <td>@Html.TextBoxFor(e => Model.UserDetails[i].Username, new { @class = "uneditable", @readonly = "readonly" })</td>
                                 <td>@Html.CheckBoxFor(e => Model.UserDetails[i].IsEnabled, new { @class = "togglebox" })</td>
-                                <td><button class="btn btn-primary right actionbtn editbtn" onclick="EditUser(@Model.UserDetails[i].Username)">Edit</button></td>
+                                <td>
+                                    <a asp-page="./EditUser" asp-route-id="@Model.UserDetails[i].Id">Edit</a>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -60,7 +62,8 @@
         $(function () {
             $(".togglebox").bootstrapToggle({
                 on: 'Enabled',
-                off: 'Disabled'
+                off: 'Disabled',
+                size:'small'
             });
         })
 

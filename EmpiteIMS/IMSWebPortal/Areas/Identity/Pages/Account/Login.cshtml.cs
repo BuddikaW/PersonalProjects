@@ -80,6 +80,15 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account
         
             if (ModelState.IsValid)
             {
+                var thisUser = _userManager.Users.Where(e => e.Email == Input.Email).FirstOrDefault();
+
+                if(thisUser != null && thisUser.IsEnabled == false)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    //return Page();
+                    return RedirectToPage("./AccessDenied");
+                }
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
