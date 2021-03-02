@@ -68,6 +68,16 @@ background-color: darkred;
     text-align: right;
 }
 
+#ItemQtyUpdateTable > thead > tr > th:nth-child(2),
+#ItemQtyUpdateTable > tbody > tr > td:nth-child(2) {
+    text-align: right;
+}
+
+#ItemQtyUpdateTable > thead > tr > th:nth-child(3),
+#ItemQtyUpdateTable > tbody > tr > td:nth-child(3) {
+    text-align: center;
+}
+
 .left{
     float:left;
 }
@@ -94,4 +104,14 @@ background-color: darkred;
 
 .deletebtn {
     cursor: pointer;
+}
+
+.numberbox{
+    text-align: left;
+    border-color: grey;
+}
+
+.errorlable{
+    color: red;
+    text-align: left;
 }

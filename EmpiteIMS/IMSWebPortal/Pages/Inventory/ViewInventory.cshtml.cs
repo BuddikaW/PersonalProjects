@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace IMSWebPortal.Pages.Inventory
 {
@@ -17,11 +18,13 @@ namespace IMSWebPortal.Pages.Inventory
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly ILogger<ViewInventoryModel> _logger;
 
-        public ViewInventoryModel(ApplicationDbContext context, UserManager<AppUser> userManager)
+        public ViewInventoryModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<ViewInventoryModel> logger)
         {
             _context = context;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public string Username { get; set; }
