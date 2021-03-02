@@ -115,3 +115,21 @@ background-color: darkred;
     color: red;
     text-align: left;
 }
+
+.uneditable{
+    border: 0;
+}
+
+.uneditable:focus {
+    border: 0 !important;
+}
+
+    .uneditable::selection {
+        border: 0 !important;
+    }
+
+    .uneditable:active {
+        border: 0 !important;
+    }
+
+
