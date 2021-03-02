@@ -1,4 +1,35 @@
 ﻿@page
 @model IMSWebPortal.Pages.Inventory.NewItemModel
 @{
+    ViewData["Title"] = "New Item";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h4>Add a new item</h4>
+            <hr />
+            <partial name="./Shared/_StatusMessage" model="Model.StatusMessage" />
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Price"></label>
+                <input asp-for="Input.Price" class="form-control" />
+                <span asp-validation-for="Input.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Qty"></label>
+                <input asp-for="Input.Qty" class="form-control" />
+                <span asp-validation-for="Input.Qty" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary savebtn">Add Item</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
