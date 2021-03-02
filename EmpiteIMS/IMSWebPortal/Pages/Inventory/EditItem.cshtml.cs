@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IMSWebPortal.Pages.User
+namespace IMSWebPortal.Pages.Inventory
 {
-    [Authorize(Roles = "Admin")]
-    public class NewUserModel : PageModel
+    [Authorize(Roles = "Admin,Manager")]
+    public class EditItemModel : PageModel
     {
         public void OnGet()
         {

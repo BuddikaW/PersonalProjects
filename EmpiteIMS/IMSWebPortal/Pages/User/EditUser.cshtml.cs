@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace IMSWebPortal.Pages.User
 {
     [Authorize(Roles = "Admin")]
-    public class NewUserModel : PageModel
+    public class EditUserModel : PageModel
     {
         public void OnGet()
         {

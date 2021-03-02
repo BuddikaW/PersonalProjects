@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IMSWebPortal.Data;
 using IMSWebPortal.Data.Models.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace IMSWebPortal.Pages.Inventory
 {
+    [Authorize(Roles = "Admin,Manager")]
     public class UpdateQtyModel : PageModel
     {
         private readonly ApplicationDbContext _context;

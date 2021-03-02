@@ -13,7 +13,7 @@
         {
             <div class="row">
                 <div class="col-md-12">
-                    <button id="addNewItemBtn" class="btn btn-primary right addbtn">Add New Item</button>
+                    <a class="btn btn-primary right addbtn" asp-page="NewItem">Add New Item</a>
                 </div>
             </div>
         }
@@ -42,8 +42,15 @@
                             <td>
                                 @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                                 {
-                                    <button class="btn btn-primary right actionbtn deletebtn" onclick="DeleteItem(@itemRecord.Id)">Delete</button>
-                                    <button class="btn btn-primary right actionbtn editbtn" onclick="EditItem(@itemRecord.Id)">Edit</button>
+                                    <a asp-page="./EditItem" asp-route-id="@itemRecord.Sku">Edit</a>
+                                    <span> | </span>
+                                    <a asp-page="./EditItem" asp-route-id="@itemRecord.Sku">Edit</a>
+
+                                    @*<a asp-page="./Delete" asp-route-id="@item.ItemId">Delete</a>*@
+
+
+                                    @*<button class="btn btn-primary right actionbtn deletebtn" onclick="DeleteItem(@itemRecord.Id)">Delete</button>
+                                    <button class="btn btn-primary right actionbtn editbtn" onclick="EditItem(@itemRecord.Id)">Edit</button>*@
                                 }
                             </td>
                         </tr>
@@ -57,10 +64,4 @@
 </div>
 
 @section Scripts {
-
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    <link rel="stylesheet" href="~/css/empite.css" />
-
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js" asp-append-version="true"></script>
 }
