@@ -1,5 +1,7 @@
 using IMSWebPortal.Data;
+using IMSWebPortal.Data.Models.Identity;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
@@ -30,19 +32,37 @@ namespace IMSWebPortal
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders()
+            .AddDefaultUI();
+
+            services.AddDataProtection();
+
+
             services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+            IWebHostEnvironment env, 
+            ApplicationDbContext context, 
+            RoleManager<AppRole> roleManager, 
+            UserManager<AppUser> userManager,
+            IDataProtectionProvider provider)
         {
-            //For automatic migration on App run
+            ////For automatic migration on App run
             //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             //{
-            //    var context = serviceScope.ServiceProvider.GetService <ApplicationDbContext>();
+            //    var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
             //    context.Database.Migrate();
             //}
 
@@ -70,6 +90,8 @@ namespace IMSWebPortal
             {
                 endpoints.MapRazorPages();
             });
+
+            SeedHelper.Initialize(context, userManager, roleManager, provider).Wait();
         }
     }
 }

@@ -2,9 +2,12 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    color: #f1a739 !important;
+    font-size: 25px;
+    font-weight:bold;
 }
 
 /* Provide sufficient contrast against white background */
@@ -12,10 +15,14 @@ a {
   color: #0366d6;
 }
 
+.display-4 {
+    color: #f1a739;
+}
+
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -69,3 +76,180 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+
+/*Customer Classes for the application*/
+
+.toggle, .toggle-on, .toggle-off {
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+    .toggle .toggle-handle {
+        border-radius: 20px;
+    }
+
+    .toggle-on:hover {
+        background-color: forestgreen;
+        color: white;
+    }
+
+    .toggle-off:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+.toggle-handle {
+    background-color: white;
+}
+
+.toggle-on {
+    background-color: green;
+}
+
+.toggle-off {
+    background-color: darkred;
+}
+
+.oktable {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+    .oktable > thead > tr > th {
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-color: darkgray;
+        background-color: #f1a739;
+        padding: 5px;
+    }
+
+    .oktable > tbody > tr > td {
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-color: #e4e2de;
+        padding: 5px;
+    }
+
+    .oktable > thead > tr:hover, .oktable > tbody > tr:hover {
+        background-color: #fdfbf6;
+    }
+
+    #UserListTable > thead > tr > th:nth-child(4), #UserListTable > tbody > tr > td:nth-child(4) {
+        text-align: center;
+    }
+
+#UserListTable > thead > tr > th:nth-child(5), #UserListTable > tbody > tr > td:nth-child(5) {
+    text-align: right;
+}
+
+#ItemListTable > thead > tr > th:nth-child(3),
+#ItemListTable > thead > tr > th:nth-child(4),
+#ItemListTable > thead > tr > th:nth-child(5),
+#ItemListTable > tbody > tr > td:nth-child(3),
+#ItemListTable > tbody > tr > td:nth-child(4),
+#ItemListTable > tbody > tr > td:nth-child(5) {
+    text-align: right;
+}
+
+#ItemQtyUpdateTable > thead > tr > th:nth-child(3),
+#ItemQtyUpdateTable > tbody > tr > td:nth-child(3) {
+    text-align: right;
+}
+
+#ItemQtyUpdateTable > thead > tr > th:nth-child(4),
+#ItemQtyUpdateTable > tbody > tr > td:nth-child(4) {
+    text-align: center;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.actionbtn {
+    margin-left: 5px;
+}
+
+.savebtn {
+    cursor: pointer;
+}
+
+.addbtn {
+    cursor: pointer;
+}
+
+.editbtn {
+    cursor: pointer;
+}
+
+.deletebtn {
+    cursor: pointer;
+}
+
+.numberbox {
+    text-align: left;
+    border: 1px solid #ecd193;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 50%;
+}
+
+.errorlable {
+    color: red;
+    text-align: left;
+}
+
+.uneditable {
+    border: 0;
+    background-color:transparent;
+}
+
+.alignright{
+    text-align:right;
+}
+
+    .uneditable:focus {
+        border: 0 !important;
+    }
+
+    .uneditable::selection {
+        border: 0 !important;
+    }
+
+    .uneditable:active {
+        border: 0 !important;
+    }
+
+.linkfeel {
+    color: #0366d6 !important;
+    cursor: pointer !important;
+}
+
+    .linkfeel:hover {
+        color: #0056b3 !important;
+        text-decoration: underline !important;
+    }
+
+.logintext {
+    color: #f1a739;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+    .logintext:hover {
+        color: #ffaa2c;
+        text-decoration: none;
+    }
+
+.menuitem:hover{
+    font-weight:bold;
+    color:darkorange !important;
+}
+
