@@ -1,0 +1,62 @@
+﻿.toggle, .toggle-on, .toggle-off {
+border-radius: 20px;
+color: white;
+cursor: pointer;
+}
+
+.toggle .toggle-handle {
+border-radius: 20px;
+}
+
+.toggle-on:hover {
+background-color: forestgreen;
+color: white;
+}
+
+.toggle-off:hover {
+background-color: #dc3545;
+color: white;
+}
+
+.toggle-handle {
+background-color: white;
+}
+
+.toggle-on {
+background-color: green;
+}
+
+.toggle-off {
+background-color: darkred;
+}
+
+#UserListTable {
+width: 100%;
+margin-top: 20px;
+margin-bottom: 20px;
+}
+
+#UserListTable > thead > tr > th {
+border-top: 1px solid;
+border-bottom: 1px solid;
+background-color: aquamarine;
+padding: 5px;
+}
+
+#UserListTable > tbody > tr > td {
+border-top: 1px solid;
+border-bottom: 1px solid;
+padding: 5px;
+}
+
+#UserListTable > thead > tr > th:last-child, #UserListTable > tbody > tr > td:last-child {
+    text-align: center;
+}
+
+.left{
+    float:left;
+}
+
+.right{
+    float: right;
+}
