@@ -87,5 +87,37 @@ namespace IMSWebPortal.Pages.Inventory
 
             return Page();
         }
+
+        public IActionResult OnGetDelete(int? id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    StatusMessage = "Error: Something went wrong!";
+                    return new JsonResult(false);
+                }
+
+                var item = _context.ItemDetails.Where(e => e.Id == id).FirstOrDefault();
+                if (item == null)
+                {
+                    StatusMessage = "Error: Something went wrong!";
+                    return new JsonResult(false);
+                }
+
+                item.IsDeleted = true;
+                _context.ItemDetails.Update(item);
+                _context.SaveChanges();
+
+                StatusMessage = "Item deleted successfully";
+                //return RedirectToPage();
+                return new JsonResult(true);
+            }
+            catch(Exception ex)
+            {
+                StatusMessage = "Error: Something went wrong!";
+                return new JsonResult(false);
+            }
+        }
     }
 }
