@@ -38,8 +38,11 @@ namespace IMSWebPortal.Pages.Inventory
             [Display(Name = "Id")]
             public int Id { get; set; }
 
-            [Display(Name = "Name")]
+            [Display(Name = "Item Name")]
             public string Name { get; set; }
+
+            [Display(Name = "SKU")]
+            public string Sku { get; set; }
 
             [Display(Name = "Price")]
             public decimal Price { get; set; }
@@ -73,6 +76,7 @@ namespace IMSWebPortal.Pages.Inventory
                 var itemRecord = new ItemDetailsModel();
                 itemRecord.Id = itemData.Id;
                 itemRecord.Name = itemData.Name;
+                itemRecord.Sku = itemData.Sku;
                 itemRecord.Price = itemData.Price;
                 itemRecord.Qty = itemData.Qty;
                 itemRecord.IsDeleted = false;
@@ -81,6 +85,94 @@ namespace IMSWebPortal.Pages.Inventory
 
             ItemDetils = itemList;
 
+            return Page();
+        }
+
+        public async Task<IActionResult> OnGetSubmit(List<ItemDetailsModel> itemDetailsModel)
+        {
+            try
+            {
+                if(itemDetailsModel.Count > 0)
+                {
+                    foreach (var itemData in ItemDetils)
+                    {
+                        var qty = itemData.Qty;
+
+                        if (qty >= 0)
+                        {
+                            var existingItem = _context.ItemDetails.Where(e => e.IsDeleted == false && e.Sku == itemData.Sku).FirstOrDefault();
+
+                            if (existingItem == null)
+                            {
+                                StatusMessage = "Error: Something went wrong!";
+                                return Page();
+                            }
+                            else
+                            {
+                                if (qty != existingItem.Qty)
+                                {
+                                    existingItem.Qty = qty;
+                                    _context.ItemDetails.Update(existingItem);
+                                    _context.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                _logger.LogInformation("Item Qty Updated");
+
+                StatusMessage = "Item qty updated successfully";
+
+                return RedirectToPage();
+            }
+            catch(Exception ex)
+            {
+                StatusMessage = "Error: Something went wrong!";
+                return Page();
+            }
+        }
+
+        public async Task<IActionResult> OnPostAsyncxxx()
+        {
+            if (ModelState.IsValid)
+            {
+                foreach(var itemData in ItemDetils)
+                {
+                    var qty = itemData.Qty;
+
+                    if(qty >= 0)
+                    {
+                        var existingItem = _context.ItemDetails.Where(e => e.IsDeleted == false && e.Sku == itemData.Sku).FirstOrDefault();
+
+                        if(existingItem == null)
+                        {
+                            StatusMessage = "Error: Something went wrong!";
+                            return Page();
+                        }
+                        else
+                        {
+                            if(qty != existingItem.Qty)
+                            {
+                                existingItem.Qty = qty;
+                                _context.ItemDetails.Update(existingItem);
+                                _context.SaveChanges();
+                            }
+                        }
+                    }
+                }
+
+                _logger.LogInformation("Item Qty Updated");
+
+                StatusMessage = "Item qty updated successfully";
+
+                return RedirectToPage();
+
+                //return LocalRedirect(returnUrl);
+                //return RedirectToPage("./ViewInventory");
+            }
+
+            // If we got this far, something failed, redisplay form
             return Page();
         }
     }

@@ -158,6 +158,7 @@ namespace IMSWebPortal.Data
 
                     var item1 = new ItemDetail();
                     item1.Name = "Triangle Ruler";
+                    item1.Sku = "EMP001";
                     item1.Price = Convert.ToDecimal("23.50");
                     item1.Qty = 200;
                     item1.IsDeleted = false;
@@ -165,6 +166,7 @@ namespace IMSWebPortal.Data
 
                     var item2 = new ItemDetail();
                     item2.Name = "HB Pencil";
+                    item2.Sku = "EMP002";
                     item2.Price = Convert.ToDecimal("17.00");
                     item2.Qty = 300;
                     item2.IsDeleted = false;
@@ -172,6 +174,7 @@ namespace IMSWebPortal.Data
 
                     var item3 = new ItemDetail();
                     item3.Name = "Drawing Board";
+                    item3.Sku = "EMP003";
                     item3.Price = Convert.ToDecimal("50.00");
                     item3.Qty = 800;
                     item3.IsDeleted = false;
@@ -179,6 +182,7 @@ namespace IMSWebPortal.Data
 
                     var item4 = new ItemDetail();
                     item4.Name = "Fabric Paint";
+                    item4.Sku = "EMP004";
                     item4.Price = Convert.ToDecimal("130.00");
                     item4.Qty = 70;
                     item4.IsDeleted = false;
@@ -186,6 +190,7 @@ namespace IMSWebPortal.Data
 
                     var item5 = new ItemDetail();
                     item5.Name = "Mapped Eraser";
+                    item5.Sku = "EMP005";
                     item5.Price = Convert.ToDecimal("90.50");
                     item5.Qty = 120;
                     item5.IsDeleted = false;
