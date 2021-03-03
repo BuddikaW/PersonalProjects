@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using IMSWebPortal.Data.Models.Identity;
+using IMSWebPortal.Pages.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IMSWebPortal.Pages.User
+namespace IMSWebPortal.Pages.ManageUser
 {
     [Authorize(Roles = "Admin,Manager,Viewer")]
     public class UserDetailsModel : PageModel
@@ -35,46 +35,7 @@ namespace IMSWebPortal.Pages.User
         public string StatusMessage { get; set; }
 
         [BindProperty]
-        public InputModel Input { get; set; }
-
-        public class InputModel
-        {
-            [Display(Name = "First Name")]
-            public string FirstName { get; set; }
-
-            [Display(Name = "Last Name")]
-            public string LastName { get; set; }
-
-            [Display(Name = "Is Active")]
-            public bool IsEnabled { get; set; }
-        }
-
-        public String Decript(string input)
-        {
-            return _protector.Unprotect(input);
-        }
-
-        public String Encript(string input)
-        {
-            return _protector.Protect(input);
-        }
-
-        private async Task LoadAsync(AppUser user)
-        {
-            var userName = await _userManager.GetUserNameAsync(user);
-
-            Username = userName;
-
-            var firstName = Decript(user.FirstName);
-            var lastName = Decript(user.LastName);
-
-            Input = new InputModel
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                IsEnabled = user.IsEnabled
-            };
-        }
+        public UserDetailModel Input { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -83,7 +44,6 @@ namespace IMSWebPortal.Pages.User
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
             await LoadAsync(user);
             return Page();
         }
@@ -120,6 +80,30 @@ namespace IMSWebPortal.Pages.User
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
+        }
+
+        private async Task LoadAsync(AppUser user)
+        {
+            var userName = await _userManager.GetUserNameAsync(user);
+            Username = userName;
+            var firstName = Decript(user.FirstName);
+            var lastName = Decript(user.LastName);
+            Input = new UserDetailModel
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                IsEnabled = user.IsEnabled
+            };
+        }
+
+        public String Decript(string input)
+        {
+            return _protector.Unprotect(input);
+        }
+
+        public String Encript(string input)
+        {
+            return _protector.Protect(input);
         }
     }
 }
