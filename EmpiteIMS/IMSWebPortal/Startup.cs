@@ -1,3 +1,4 @@
+using Hangfire;
 using IMSWebPortal.Data;
 using IMSWebPortal.Data.Models.Identity;
 using Microsoft.AspNetCore.Builder;
@@ -35,9 +36,6 @@ namespace IMSWebPortal
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
-
             services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
@@ -45,8 +43,17 @@ namespace IMSWebPortal
             .AddDefaultTokenProviders()
             .AddDefaultUI();
 
-            services.AddDataProtection();
+            services.AddHangfire(options =>
+                options.UseAzureDocumentDbStorage(
+                    "https://projboo.documents.azure.com:443/",
+                    "v5bfjAtEkRoOEGVOhrYNTXwk5gmx1JDiyI0I5nEIOUR0kUgDKFoaZhJthi3kC2MZNC93hECC1SKn9bHeRKMWGw==",
+                    "DB2",
+                    "C2")
+            ) ;
 
+            services.AddHangfireServer();
+
+            services.AddDataProtection();
 
             services.AddRazorPages();
         }
@@ -80,6 +87,7 @@ namespace IMSWebPortal
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseHangfireDashboard();
 
             app.UseRouting();
 

@@ -1,55 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using IMSWebPortal.Data.Models.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using IMSWebPortal.Data;
+using IMSWebPortal.Data.Models.Identity;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Authentication;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 using IMSWebPortal.Pages.Dtos.DtoMapping;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
-namespace IMSWebPortal.Areas.Identity.Pages.Account
+namespace IMSWebPortal.Pages.ManageUser
 {
-    [AllowAnonymous]
-    public class RegisterModel : PageModel
+    [Authorize(Roles = "Admin")]
+    public class CreateModel : PageModel
     {
-        private readonly SignInManager<AppUser> _signInManager;
+        private readonly IDataProtectionProvider _provider;
+        private readonly RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
-        private readonly ILogger<RegisterModel> _logger;
+        private readonly ILogger<CreateModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IDataProtectionProvider _protector;
 
-        public RegisterModel(
+        public CreateModel(IDataProtectionProvider provider,
+            RoleManager<AppRole> roleManager,
             UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
-            IDataProtectionProvider provider)
+            ILogger<CreateModel> logger,
+            IEmailSender emailSender)
         {
+            _provider = provider;
+            _roleManager = roleManager;
             _userManager = userManager;
-            _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _protector = provider;
         }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
+        public List<SelectListItem> Options { get; set; }
+
         [BindProperty]
-        public InputModel Input { get; set; }
+        public RegistrationModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
-
-        public class InputModel
+        public class RegistrationModel
         {
             [Required]
             [EmailAddress]
@@ -74,29 +78,63 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "User Type")]
+            public string UserTypeName { get; set; }
+        }
+
+        public class UserType
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var roles = _roleManager.Roles;
+            var userTypes = new List<UserType>();
+            foreach(var role in roles)
+            {
+                var userType = new UserType();
+                userType.Id = role.Id;
+                userType.Name = role.Name;
+                userTypes.Add(userType);
+            }
+
+            Options = userTypes.OrderByDescending(e=>e.Name).Select(e => new SelectListItem
+            {
+                Value = e.Name.ToString(),
+                Text = e.Name
+            }).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 //Encript User Details
-                var firstName = new UserDtoMap(_protector).Encript(Input.FirstName);
-                var lastName = new UserDtoMap(_protector).Encript(Input.LastName);
+                var firstName = new UserDtoMap(_provider).Encript(Input.FirstName);
+                var lastName = new UserDtoMap(_provider).Encript(Input.LastName);
+
+                if (await _userManager.FindByEmailAsync(Input.Email) != null)
+                {
+                    StatusMessage = "Error: User Name " + Input.Email + " already exist";
+                    return RedirectToPage();
+                }
 
                 var user = new AppUser { UserName = Input.Email, Email = Input.Email, FirstName = firstName, LastName = lastName, IsEnabled = true };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    if (result.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(user, Input.UserTypeName);
+                    }
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -115,18 +153,20 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        StatusMessage = "New user created successfully";
+                        return RedirectToPage("./Index");
                     }
                 }
+                var errorList = "";
                 foreach (var error in result.Errors)
                 {
+                    errorList += error.Description + "/";
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
+                StatusMessage = "Error: [" + errorList + "]";
             }
-
-            // If we got this far, something failed, redisplay form
-            return Page();
+            return RedirectToPage();
+            //return Page();
         }
     }
 }
