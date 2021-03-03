@@ -1,37 +1,34 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using IMSWebPortal.Data;
-using IMSWebPortal.Data.Models.Identity;
-using IMSWebPortal.Pages.Dtos;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using IMSWebPortal.Data;
+using IMSWebPortal.Data.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.DataProtection;
+using IMSWebPortal.Pages.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
-namespace IMSWebPortal.Pages.User
+namespace IMSWebPortal.Pages.ManageUser
 {
     [Authorize(Roles = "Admin")]
-    public class ManageUsersModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly ILogger<ManageUsersModel> _logger;
+        private readonly ILogger<IndexModel> _logger;
         private readonly IDataProtector _protector;
 
-        public ManageUsersModel(ApplicationDbContext context,
+        public IndexModel(ApplicationDbContext context,
             UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager,
-            IDataProtectionProvider provider, 
-            ILogger<ManageUsersModel> logger)
+            IDataProtectionProvider provider,
+            ILogger<IndexModel> logger)
         {
             _context = context;
-            _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _protector = provider.CreateProtector("empite");
@@ -57,15 +54,11 @@ namespace IMSWebPortal.Pages.User
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
             var userName = await _userManager.GetUserNameAsync(user);
             Username = userName;
-
-            var allUsers = _context.Users.Where(e=>e.UserName != Username).OrderBy(e => e.IsEnabled).ToList();
-
+            var allUsers = _context.Users.Where(e => e.UserName != Username).OrderBy(e => e.IsEnabled).ToList();
             var userList = new List<UserDetailModel>();
-
-            foreach(var userProfile in allUsers)
+            foreach (var userProfile in allUsers)
             {
                 var userDetail = new UserDetailModel();
                 userDetail.Id = userProfile.Id;
@@ -75,9 +68,7 @@ namespace IMSWebPortal.Pages.User
                 userDetail.IsEnabled = userProfile.IsEnabled;
                 userList.Add(userDetail);
             }
-
             UserDetails = userList;
-
             return Page();
         }
 
@@ -88,9 +79,7 @@ namespace IMSWebPortal.Pages.User
                 foreach (var userData in UserDetails)
                 {
                     var userName = userData.Username;
-
                     var existingUser = _context.Users.Where(e => e.UserName == userName).FirstOrDefault();
-
                     if (existingUser == null)
                     {
                         StatusMessage = "Error: Something went wrong!";
@@ -106,11 +95,8 @@ namespace IMSWebPortal.Pages.User
                         }
                     }
                 }
-
                 _logger.LogInformation("User Details Updated");
-
                 StatusMessage = "User details updated successfully";
-
                 return RedirectToPage();
             }
             return Page();

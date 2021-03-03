@@ -1,28 +1,28 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using IMSWebPortal.Data;
-using IMSWebPortal.Data.Models.Identity;
-using IMSWebPortal.Data.Models.Inventory;
-using IMSWebPortal.Pages.Dtos;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using IMSWebPortal.Data;
+using IMSWebPortal.Data.Models.Inventory;
+using Microsoft.AspNetCore.Identity;
+using IMSWebPortal.Data.Models.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using IMSWebPortal.Pages.Dtos;
 
-namespace IMSWebPortal.Pages.Inventory
+namespace IMSWebPortal.Pages.ManageInventory
 {
     [Authorize(Roles = "Admin,Manager")]
-    public class NewItemModel : PageModel
+    public class CreateModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<NewItemModel> _logger;
+        private readonly ILogger<CreateModel> _logger;
 
-        public NewItemModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<NewItemModel> logger)
+        public CreateModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<CreateModel> logger)
         {
             _context = context;
             _userManager = userManager;
@@ -39,7 +39,6 @@ namespace IMSWebPortal.Pages.Inventory
         [BindProperty]
         public ItemDetailModel Input { get; set; }
 
-
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
@@ -50,7 +49,7 @@ namespace IMSWebPortal.Pages.Inventory
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid)
             {
-                if(_context.ItemDetails.Any(e => e.Sku == Input.Sku && e.IsDeleted == false))
+                if (_context.ItemDetails.Any(e => e.Sku == Input.Sku && e.IsDeleted == false))
                 {
                     StatusMessage = "Error: Duplicate SKU value. Item with SKU #" + Input.Sku + " already exist.";
                     return Page();

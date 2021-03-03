@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace IMSWebPortal.Pages.Inventory
+namespace IMSWebPortal.Pages.ManageInventory
 {
     [Authorize(Roles = "Admin,Manager")]
     public class SendReportModel : PageModel
@@ -52,13 +52,13 @@ namespace IMSWebPortal.Pages.Inventory
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            if(Input.RecipientList != "")
+            if (Input.RecipientList != "")
             {
                 var emailList = Input.RecipientList.Split(',');
 
                 var subject = "Test";
 
-                foreach(var email in emailList)
+                foreach (var email in emailList)
                 {
                     var result = new EmailClient(_context).SendEmail("<html><body>Hi</body></html>", email, subject);
                 }

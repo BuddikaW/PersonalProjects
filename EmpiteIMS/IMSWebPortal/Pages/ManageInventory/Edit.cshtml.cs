@@ -1,28 +1,29 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using IMSWebPortal.Data;
-using IMSWebPortal.Data.Models.Identity;
-using IMSWebPortal.Data.Models.Inventory;
-using IMSWebPortal.Pages.Dtos;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using IMSWebPortal.Data;
+using IMSWebPortal.Data.Models.Inventory;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using IMSWebPortal.Data.Models.Identity;
+using IMSWebPortal.Pages.Dtos;
 
-namespace IMSWebPortal.Pages.Inventory
+namespace IMSWebPortal.Pages.ManageInventory
 {
     [Authorize(Roles = "Admin,Manager")]
-    public class EditItemModel : PageModel
+    public class EditModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<EditItemModel> _logger;
+        private readonly ILogger<EditModel> _logger;
 
-        public EditItemModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<EditItemModel> logger)
+        public EditModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<EditModel> logger)
         {
             _context = context;
             _userManager = userManager;
@@ -66,7 +67,7 @@ namespace IMSWebPortal.Pages.Inventory
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid)
             {
-                if(Input.Sku != Input.PrvSku && _context.ItemDetails.Any(e=>e.Sku == Input.Sku && e.IsDeleted == false))
+                if (Input.Sku != Input.PrvSku && _context.ItemDetails.Any(e => e.Sku == Input.Sku && e.IsDeleted == false))
                 {
                     StatusMessage = "Error: Duplicate SKU value. Item with SKU #" + Input.Sku + " already exist.";
                     return Page();

@@ -1,27 +1,28 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using IMSWebPortal.Data;
+using IMSWebPortal.Data.Models.Inventory;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using IMSWebPortal.Data.Models.Identity;
 using IMSWebPortal.Pages.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
-namespace IMSWebPortal.Pages.Inventory
+namespace IMSWebPortal.Pages.ManageInventory
 {
     [Authorize(Roles = "Admin,Manager,Viewer")]
-    public class ViewInventoryModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
-        private readonly ILogger<ViewInventoryModel> _logger;
+        private readonly ILogger<IndexModel> _logger;
 
-        public ViewInventoryModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<ViewInventoryModel> logger)
+        public IndexModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<IndexModel> logger)
         {
             _context = context;
             _userManager = userManager;
@@ -93,7 +94,7 @@ namespace IMSWebPortal.Pages.Inventory
                 //return RedirectToPage();
                 return new JsonResult(true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 StatusMessage = "Error: Something went wrong!";
                 return new JsonResult(false);

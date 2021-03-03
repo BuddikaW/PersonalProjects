@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using IMSWebPortal.Data;
@@ -12,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace IMSWebPortal.Pages.Inventory
+namespace IMSWebPortal.Pages.ManageInventory
 {
     [Authorize(Roles = "Admin,Manager")]
     public class UpdateQtyModel : PageModel
@@ -72,22 +71,22 @@ namespace IMSWebPortal.Pages.Inventory
         {
             if (ModelState.IsValid)
             {
-                foreach(var itemData in ItemDetils)
+                foreach (var itemData in ItemDetils)
                 {
                     var qty = itemData.Qty;
 
-                    if(qty >= 0)
+                    if (qty >= 0)
                     {
                         var existingItem = _context.ItemDetails.Where(e => e.IsDeleted == false && e.Sku == itemData.Sku).FirstOrDefault();
 
-                        if(existingItem == null)
+                        if (existingItem == null)
                         {
                             StatusMessage = "Error: Something went wrong!";
                             return Page();
                         }
                         else
                         {
-                            if(qty != existingItem.Qty)
+                            if (qty != existingItem.Qty)
                             {
                                 existingItem.Qty = qty;
                                 _context.ItemDetails.Update(existingItem);

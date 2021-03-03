@@ -1,0 +1,25 @@
+﻿@page
+@model IMSWebPortal.Pages.ManageInventory.SendReportModel
+@{
+    ViewData["Title"] = "Inv Report";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h4>Send Inventory Summary Report</h4>
+            <hr />
+            <partial name="./Shared/_StatusMessage" model="Model.StatusMessage" />
+            <div class="form-group">
+                <label asp-for="Input.RecipientList"></label>
+                <textarea asp-for="Input.RecipientList" class="form-control recipientarea" placeholder="Type the email addresses seperated with a comma (,)"></textarea>
+                <span asp-validation-for="Input.RecipientList" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary savebtn">Send Inventory Report</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
