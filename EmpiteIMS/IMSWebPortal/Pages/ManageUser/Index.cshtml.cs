@@ -52,7 +52,7 @@ namespace IMSWebPortal.Pages.ManageUser
             }
             var userName = await _userManager.GetUserNameAsync(user);
             Username = userName;
-            var allUsers = _context.Users.Where(e => e.UserName != Username).OrderBy(e => e.IsEnabled).ToList();
+            var allUsers = _context.Users.Where(e => e.UserName != Username).OrderByDescending(e => e.IsEnabled).ToList();
             var userList = new UserDtoMap(_provider).Map(allUsers);
             UserDetails = userList;
             return Page();

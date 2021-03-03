@@ -2,121 +2,41 @@
 @model IMSWebPortal.Pages.ManageUser.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "User Details";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>AppUser</h4>
+    <h4>User Details</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.FirstName)
+            @Html.DisplayNameFor(model => model.Input.FirstName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.FirstName)
+            @Html.DisplayFor(model => model.Input.FirstName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.LastName)
+            @Html.DisplayNameFor(model => model.Input.LastName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.LastName)
+            @Html.DisplayFor(model => model.Input.LastName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.IsEnabled)
+            @Html.DisplayNameFor(model => model.Input.Email)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.IsEnabled)
+            @Html.DisplayFor(model => model.Input.Email)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.UserName)
+            @Html.DisplayNameFor(model => model.Input.UserTypeName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.UserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.NormalizedUserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.NormalizedUserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.NormalizedEmail)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.NormalizedEmail)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.EmailConfirmed)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.EmailConfirmed)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.PasswordHash)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.PasswordHash)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.SecurityStamp)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.SecurityStamp)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.ConcurrencyStamp)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.ConcurrencyStamp)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.PhoneNumberConfirmed)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.PhoneNumberConfirmed)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.TwoFactorEnabled)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.TwoFactorEnabled)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.LockoutEnd)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.LockoutEnd)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.LockoutEnabled)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.LockoutEnabled)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUser.AccessFailedCount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.AccessFailedCount)
+            @Html.DisplayFor(model => model.Input.UserTypeName)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.AppUser.Id">Edit</a> |
+    <a asp-page="./Edit" asp-route-id="@Model.Input.Id">Edit</a> |
     <a asp-page="./Index">Back to List</a>
 </div>
