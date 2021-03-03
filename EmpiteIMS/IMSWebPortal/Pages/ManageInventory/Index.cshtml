@@ -1,27 +1,33 @@
 ﻿@page
-@model IMSWebPortal.Pages.Inventory.ViewInventoryModel
+@model IMSWebPortal.Pages.ManageInventory.IndexModel
+
 @{
     ViewData["Title"] = "Item Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h4>@ViewData["Title"]</h4>
+<h2>@ViewData["Title"]</h2>
 <partial name="./Shared/_StatusMessage" model="Model.StatusMessage" />
-<div class="row">
+
+
+<div id='app' class="row">
     <div class="col-md-12">
 
         @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
         {
             <div class="row">
                 <div class="col-md-12">
-                    <a class="btn btn-primary right addbtn" asp-page="NewItem">Add New Item</a>
+                    <p>
+                        <a asp-page="Create">Add New Item</a>
+                    </p>
                 </div>
             </div>
         }
 
         <form id="profile-form" method="post">
 
-            <dv>
-                <input type="hidden" id="deleteId"/>
+            <div>
+                <input type="hidden" id="deleteId" v-model="deleteId" />
                 <table id="ItemListTable" class="oktable">
                     <thead>
                         <tr>
@@ -43,18 +49,21 @@
                                 <td>
                                     @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                                     {
-                                        <a asp-page="./EditItem" asp-route-id="@itemRecord.Id">Edit</a>
+                                        <a asp-page="./Edit" asp-route-id="@itemRecord.Id">Edit</a>
                                         <span> | </span>
-                                        <a class="linkfeel" data-toggle="modal" data-target="#exampleModal" onclick="SelectDeleteItem(@itemRecord.Id)">Delete</a>
+                                        <a asp-page="./Details" asp-route-id="@itemRecord.Id">Details</a>
+                                        <span> | </span>
+                                        <a class="linkfeel" data-toggle="modal" data-target="#exampleModal" v-on:click="SelectDeleteItem(@itemRecord.Id)">Delete</a>
                                     }
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-            </dv>
+            </div>
 
         </form>
+
     </div>
 
     <!-- Modal -->
@@ -66,44 +75,39 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="DeleteItem()">Yes</button>
+                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" v-on:click="DeleteItem()">Yes</button>
                 </div>
             </div>
 
         </div>
     </div>
 
-
 </div>
 
 @section Scripts {
 
     <script>
-        function SelectDeleteItem(id) {
-            document.getElementById("deleteId").value = id;
-        }
 
-        function DeleteItem() {
-            var itemId = document.getElementById("deleteId").value;
-            if (itemId != "") {
-                $.ajax({
-                    type: 'GET',
-                    url: '?handler=Delete',
-                    data: { id: itemId },
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data == true) {
-                            location.reload();
-                        } else {
-                            alert("Action failed due to some reason");
-                        }
-                    },
-                    error: function (error) {
-                        alert("Action failed due to some reason");
+        var vueApp = new Vue({
+            el: '#app',
+            data: {
+                deleteId: 0
+            },
+            methods: {
+                SelectDeleteItem: function (id) {
+                    this.deleteId = id;
+                },
+                DeleteItem: function () {
+                    var headers = {
+                        "RequestVerificationToken": $('input:hidden[name="__RequestVerificationToken"]').val()
                     }
-                })
+                    axios.post('/ManageInventory/Index/?id=' + this.deleteId, null, { headers: headers })
+                        .then(response => {location.reload();})
+                        .catch(error => alert(error));
+                }
             }
-        }
+        })
+
     </script>
 
 }

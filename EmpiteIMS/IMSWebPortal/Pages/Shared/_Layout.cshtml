@@ -9,6 +9,8 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <header>
@@ -24,7 +26,7 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark menuitem" asp-area="" asp-page="/Inventory/ViewInventory">Item Details</a>
+                                <a class="nav-link text-dark menuitem" asp-area="" asp-page="/ManageInventory/Index">Item Details</a>
                             </li>
 
                             @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
@@ -33,17 +35,17 @@
                                     <a class="nav-link text-dark menuitem" asp-area="" asp-page="/Inventory/NewItem">Add Items</a>
                                 </li>*@
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark menuitem" asp-area="" asp-page="/Inventory/UpdateQty">Update Inventory</a>
+                                    <a class="nav-link text-dark menuitem" asp-area="" asp-page="/ManageInventory/UpdateQty">Update Inventory</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark menuitem" asp-area="" asp-page="/Inventory/SendReport">Send Report</a>
+                                    <a class="nav-link text-dark menuitem" asp-area="" asp-page="/ManageInventory/SendReport">Send Report</a>
                                 </li>
                             }
 
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark menuitem" asp-area="" asp-page="/User/ManageUsers">Manage Users</a>
+                                    <a class="nav-link text-dark menuitem" asp-area="" asp-page="/ManageUser/Index">Manage Users</a>
                                 </li>
                             }
                         }

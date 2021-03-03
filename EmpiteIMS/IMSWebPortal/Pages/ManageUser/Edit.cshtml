@@ -1,0 +1,51 @@
+﻿@page
+@model IMSWebPortal.Pages.ManageUser.EditModel
+
+@{
+    ViewData["Title"] = "Edit User";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h4>Edit User</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+            <partial name="./Shared/_StatusMessage" model="Model.StatusMessage" />
+            <input type="hidden" asp-for="Input.Id" />
+            <input type="hidden" asp-for="Input.PrvEmail" />
+            <input type="hidden" asp-for="Input.PrvUserType" />
+            <div class="form-group">
+                <label asp-for="Input.FirstName" class="control-label"></label>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.LastName" class="control-label"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Email" class="control-label"></label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.UserTypeName" class="control-label"></label>
+                <select class="form-control" name="Input.UserTypeName" asp-items="Model.Options"></select>
+                <span asp-validation-for="Input.UserTypeName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Update User" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

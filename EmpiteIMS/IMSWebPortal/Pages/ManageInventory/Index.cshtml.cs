@@ -1,26 +1,29 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using IMSWebPortal.Data;
-using IMSWebPortal.Data.Models.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using IMSWebPortal.Data;
+using IMSWebPortal.Data.Models.Inventory;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using IMSWebPortal.Data.Models.Identity;
+using IMSWebPortal.Pages.Dtos;
+using Microsoft.AspNetCore.Authorization;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 
-namespace IMSWebPortal.Pages.Inventory
+namespace IMSWebPortal.Pages.ManageInventory
 {
     [Authorize(Roles = "Admin,Manager,Viewer")]
-    public class ViewInventoryModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
-        private readonly ILogger<ViewInventoryModel> _logger;
+        private readonly ILogger<IndexModel> _logger;
 
-        public ViewInventoryModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<ViewInventoryModel> logger)
+        public IndexModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<IndexModel> logger)
         {
             _context = context;
             _userManager = userManager;
@@ -33,28 +36,7 @@ namespace IMSWebPortal.Pages.Inventory
         public string StatusMessage { get; set; }
 
         [BindProperty]
-        public IList<ItemDetailsModel> ItemDetils { get; set; }
-
-        public class ItemDetailsModel
-        {
-            [Display(Name = "Id")]
-            public int Id { get; set; }
-
-            [Display(Name = "Item Name")]
-            public string Name { get; set; }
-
-            [Display(Name = "Sku")]
-            public string Sku { get; set; }
-
-            [Display(Name = "Price")]
-            public decimal Price { get; set; }
-
-            [Display(Name = "Qty")]
-            public int Qty { get; set; }
-
-            [Display(Name = "Is Deleted")]
-            public bool IsDeleted { get; set; }
-        }
+        public IList<ItemDetailModel> ItemDetils { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -63,46 +45,28 @@ namespace IMSWebPortal.Pages.Inventory
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
             var userName = await _userManager.GetUserNameAsync(user);
             Username = userName;
-
             var allItems = _context.ItemDetails.Where(e => e.IsDeleted == false).OrderBy(e => e.Name).ToList();
-
-            var itemList = new List<ItemDetailsModel>();
-
-            foreach (var itemData in allItems)
-            {
-                var itemRecord = new ItemDetailsModel();
-                itemRecord.Id = itemData.Id;
-                itemRecord.Name = itemData.Name;
-                itemRecord.Sku = itemData.Sku;
-                itemRecord.Price = itemData.Price;
-                itemRecord.Qty = itemData.Qty;
-                itemRecord.IsDeleted = false;
-                itemList.Add(itemRecord);
-            }
-
-            ItemDetils = itemList;
-
+            ItemDetils = new ItemDtoMap().Map(allItems);
             return Page();
         }
 
-        public IActionResult OnGetDelete(int? id)
+        public IActionResult OnPost(int? id)
         {
             try
             {
                 if (id == null)
                 {
                     StatusMessage = "Error: Something went wrong!";
-                    return new JsonResult(false);
+                    return new JsonResult(true);
                 }
 
                 var item = _context.ItemDetails.Where(e => e.Id == id).FirstOrDefault();
                 if (item == null)
                 {
                     StatusMessage = "Error: Something went wrong!";
-                    return new JsonResult(false);
+                    return new JsonResult(true);
                 }
 
                 item.IsDeleted = true;
@@ -113,10 +77,10 @@ namespace IMSWebPortal.Pages.Inventory
                 //return RedirectToPage();
                 return new JsonResult(true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 StatusMessage = "Error: Something went wrong!";
-                return new JsonResult(false);
+                return new JsonResult(true);
             }
         }
     }

@@ -1,41 +1,50 @@
 ﻿@page
-@model IMSWebPortal.Pages.Inventory.EditItemModel
+@model IMSWebPortal.Pages.ManageInventory.EditModel
+
 @{
     ViewData["Title"] = "Edit Item";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+<h4>Edit Item Details</h4>
+<hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Add a new item</h4>
-            <hr />
+        <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
             <partial name="./Shared/_StatusMessage" model="Model.StatusMessage" />
+            <input type="hidden" asp-for="Input.Id" />
+            <input type="hidden" asp-for="Input.PrvSku" />
             <div class="form-group">
-                <label asp-for="Input.Name"></label>
+                <label asp-for="Input.Name" class="control-label"></label>
                 <input asp-for="Input.Name" class="form-control" />
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Sku"></label>
+                <label asp-for="Input.Sku" class="control-label"></label>
                 <input asp-for="Input.Sku" class="form-control" />
-                <input type="hidden" asp-for="Input.PrvSku" class="form-control" />
                 <span asp-validation-for="Input.Sku" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Price"></label>
+                <label asp-for="Input.Price" class="control-label"></label>
                 <input asp-for="Input.Price" class="form-control" />
                 <span asp-validation-for="Input.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Input.Qty"></label>
+                <label asp-for="Input.Qty" class="control-label"></label>
                 <input asp-for="Input.Qty" class="form-control" />
                 <span asp-validation-for="Input.Qty" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary savebtn">Update Item</button>
+            <div class="form-group">
+                <input type="submit" value="Update Item" class="btn btn-primary savebtn" />
+            </div>
         </form>
     </div>
 </div>
 
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

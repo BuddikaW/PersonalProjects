@@ -1,27 +1,30 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using IMSWebPortal.Data;
-using IMSWebPortal.Data.Models.Identity;
 using IMSWebPortal.Data.Models.Inventory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using IMSWebPortal.Data.Models.Identity;
+using IMSWebPortal.Pages.Dtos;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 
-namespace IMSWebPortal.Pages.Inventory
+namespace IMSWebPortal.Pages.ManageInventory
 {
     [Authorize(Roles = "Admin,Manager")]
-    public class EditItemModel : PageModel
+    public class EditModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<EditItemModel> _logger;
+        private readonly ILogger<EditModel> _logger;
 
-        public EditItemModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<EditItemModel> logger)
+        public EditModel(ApplicationDbContext context, UserManager<AppUser> userManager, ILogger<EditModel> logger)
         {
             _context = context;
             _userManager = userManager;
@@ -34,38 +37,7 @@ namespace IMSWebPortal.Pages.Inventory
         public string StatusMessage { get; set; }
 
         [BindProperty]
-        public ItemModel Input { get; set; }
-
-        public class ItemModel
-        {
-            [Required]
-            [Display(Name = "Id")]
-            public int Id { get; set; }
-
-            [Required]
-            [Display(Name = "Item Name")]
-            public string Name { get; set; }
-
-            [Required]
-            [Display(Name = "Sku")]
-            public string Sku { get; set; }
-
-            [Display(Name = "PrvSku")]
-            public string PrvSku { get; set; }
-
-            [Required]
-            [Display(Name = "Price")]
-            //[RegularExpression(@"^\$?\d+(\.(\d{2}))?$", ErrorMessage = "Please enter a valid price")]
-            [Range(0, 10000000000, ErrorMessage = "Please enter a valid price")]
-            public decimal Price { get; set; }
-
-            [Required]
-            [Display(Name = "Available Qty")]
-            [Range(0, 10000000000, ErrorMessage = "Please enter a valid qty")]
-            [RegularExpression("([0-9]+)", ErrorMessage = "Please enter a valid qty")]
-            //[Range(0, int.MaxValue, ErrorMessage = "Please enter valid integer Number")]
-            public int Qty { get; set; }
-        }
+        public ItemDetailModel Input { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -78,16 +50,7 @@ namespace IMSWebPortal.Pages.Inventory
             {
                 return NotFound();
             }
-
-            var itemModel = new ItemModel();
-            itemModel.Id = item.Id;
-            itemModel.Name = item.Name;
-            itemModel.Sku = item.Sku;
-            itemModel.Price = item.Price;
-            itemModel.Qty = item.Qty;
-            itemModel.PrvSku = item.Sku;
-
-            Input = itemModel;
+            Input = new ItemDtoMap().Map(item);
             return Page();
         }
 
@@ -96,7 +59,7 @@ namespace IMSWebPortal.Pages.Inventory
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid)
             {
-                if(Input.Sku != Input.PrvSku && _context.ItemDetails.Any(e=>e.Sku == Input.Sku && e.IsDeleted == false))
+                if (Input.Sku != Input.PrvSku && _context.ItemDetails.Any(e => e.Sku == Input.Sku && e.IsDeleted == false))
                 {
                     StatusMessage = "Error: Duplicate SKU value. Item with SKU #" + Input.Sku + " already exist.";
                     return Page();

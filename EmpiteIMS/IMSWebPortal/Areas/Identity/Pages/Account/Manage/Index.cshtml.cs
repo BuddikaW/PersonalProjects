@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using IMSWebPortal.Data.Models.Identity;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IDataProtector _protector;
+        private readonly IDataProtectionProvider _provider;
 
         public IndexModel(
             UserManager<AppUser> userManager,
@@ -24,7 +25,7 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account.Manage
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _protector = provider.CreateProtector("empite");
+            _provider = provider;
         }
 
         public string Username { get; set; }
@@ -51,11 +52,6 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account.Manage
             public bool IsEnabled { get; set; }
         }
 
-        public String Decript(string input)
-        {
-            return _protector.Unprotect(input);
-        }
-
         private async Task LoadAsync(AppUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
@@ -63,8 +59,8 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account.Manage
 
             Username = userName;
 
-            var firstName = Decript(user.FirstName);
-            var lastName = Decript(user.LastName);
+            var firstName = new UserDtoMap(_provider).Decript(user.FirstName);
+            var lastName = new UserDtoMap(_provider).Decript(user.LastName);
 
             Input = new InputModel
             {
