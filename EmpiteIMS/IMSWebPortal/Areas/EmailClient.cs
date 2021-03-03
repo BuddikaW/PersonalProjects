@@ -31,15 +31,15 @@ namespace IMSWebPortal.Areas
             password = mailConfigurations.Password;
         }
 
-        public bool SendEmail(string htmlString, string toRecipient)
+        public bool SendEmail(string htmlString, string toRecipient, string subject)
         {
             try
             {
                 MailMessage message = new MailMessage();
                 message.From = new MailAddress(userName);
                 message.To.Add(new MailAddress(toRecipient));
-                message.Subject = "Test";
-                message.IsBodyHtml = true;  
+                message.Subject = subject;
+                message.IsBodyHtml = true;
                 message.Body = htmlString;
                 SmtpClient smtp = new SmtpClient();
                 smtp.Port = port;
@@ -56,13 +56,13 @@ namespace IMSWebPortal.Areas
             }
         }
 
-        public void SendEmail(string htmlString, List<string> toRecipients)
+        public void SendEmail(string htmlString, List<string> toRecipients, string subject)
         {
             try
             {
                 foreach(var toRecipient in toRecipients)
                 {
-                    SendEmail(htmlString, toRecipient);
+                    SendEmail(htmlString, toRecipient, subject);
                 }
             }
             catch (Exception ex) {

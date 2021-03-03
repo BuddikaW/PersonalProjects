@@ -56,9 +56,11 @@ namespace IMSWebPortal.Pages.Inventory
             {
                 var emailList = Input.RecipientList.Split(',');
 
+                var subject = "Test";
+
                 foreach(var email in emailList)
                 {
-                    var result = new EmailClient(_context).SendEmail("<html><body>Hi</body></html>", email);
+                    var result = new EmailClient(_context).SendEmail("<html><body>Hi</body></html>", email, subject);
                 }
 
 
