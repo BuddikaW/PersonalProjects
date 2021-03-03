@@ -52,21 +52,21 @@ namespace IMSWebPortal.Pages.ManageInventory
             return Page();
         }
 
-        public IActionResult OnGetDelete(int? id)
+        public IActionResult OnPost(int? id)
         {
             try
             {
                 if (id == null)
                 {
                     StatusMessage = "Error: Something went wrong!";
-                    return new JsonResult(false);
+                    return new JsonResult(true);
                 }
 
                 var item = _context.ItemDetails.Where(e => e.Id == id).FirstOrDefault();
                 if (item == null)
                 {
                     StatusMessage = "Error: Something went wrong!";
-                    return new JsonResult(false);
+                    return new JsonResult(true);
                 }
 
                 item.IsDeleted = true;
@@ -80,7 +80,7 @@ namespace IMSWebPortal.Pages.ManageInventory
             catch (Exception ex)
             {
                 StatusMessage = "Error: Something went wrong!";
-                return new JsonResult(false);
+                return new JsonResult(true);
             }
         }
     }
