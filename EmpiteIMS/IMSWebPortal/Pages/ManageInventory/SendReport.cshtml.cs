@@ -40,7 +40,7 @@ namespace IMSWebPortal.Pages.ManageInventory
 
         public class EmailModel
         {
-            [Required]
+            [Required(ErrorMessage ="Please add recipient email address")]
             [Display(Name = "Recipient List")]
             public string RecipientList { get; set; }
         }
@@ -52,17 +52,38 @@ namespace IMSWebPortal.Pages.ManageInventory
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            if (Input.RecipientList != "")
+            try
             {
-                var emailList = Input.RecipientList.Split(',');
-
-                var subject = "EmpiteIMS - Inventory Details";
-                var body = GenerateHtml();
-
-                foreach (var email in emailList)
+                if(Input.RecipientList == null)
                 {
-                    var result = new EmailClient(_context).SendEmail(body, email, subject);
+                    StatusMessage = "Error: Please add recipient email address";
+                    return Page();
                 }
+                var recipientList = Input.RecipientList.Trim();
+                if (recipientList != "")
+                {
+                    if (recipientList.IndexOf('@') < 0)
+                    {
+                        StatusMessage = "Error: Please add valid email addresses";
+                        return Page();
+                    }
+                    var emailList = recipientList.Split(',');
+                    var subject = "EmpiteIMS - Inventory Details";
+                    var body = GenerateHtml();
+                    foreach (var email in emailList)
+                    {
+                        var result = new EmailClient(_context).SendEmail(body, email, subject);
+                    }
+                    StatusMessage = "Email que added";
+                }
+                else
+                {
+                    StatusMessage = "Error: Please add recipient email address";
+                }
+            }
+            catch(Exception ex)
+            {
+                StatusMessage = "Error: Something went wrong!";
             }
             return Page();
         }
