@@ -31,7 +31,7 @@
                                 @Html.DisplayNameFor(model => model.UserDetails[0].LastName)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.UserDetails[0].Username)
+                                @Html.DisplayNameFor(model => model.UserDetails[0].UserName)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.UserDetails[0].IsEnabled)
@@ -45,7 +45,7 @@
                             <tr>
                                 <td>@Html.TextBoxFor(e => Model.UserDetails[i].FirstName, new { @class = "uneditable", @readonly = "readonly" })</td>
                                 <td>@Html.TextBoxFor(e => Model.UserDetails[i].LastName, new { @class = "uneditable", @readonly = "readonly" })</td>
-                                <td>@Html.TextBoxFor(e => Model.UserDetails[i].Username, new { @class = "uneditable", @readonly = "readonly" })</td>
+                                <td>@Html.TextBoxFor(e => Model.UserDetails[i].UserName, new { @class = "uneditable", @readonly = "readonly" })</td>
                                 <td>@Html.CheckBoxFor(e => Model.UserDetails[i].IsEnabled, new { @class = "togglebox" })</td>
                                 <td>
                                     <a asp-page="./Edit" asp-route-id="@Model.UserDetails[i].Id">Edit</a> |

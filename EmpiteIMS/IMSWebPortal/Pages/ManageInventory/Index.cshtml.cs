@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using IMSWebPortal.Data.Models.Identity;
 using IMSWebPortal.Pages.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 
 namespace IMSWebPortal.Pages.ManageInventory
 {
@@ -44,28 +45,10 @@ namespace IMSWebPortal.Pages.ManageInventory
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
             var userName = await _userManager.GetUserNameAsync(user);
             Username = userName;
-
             var allItems = _context.ItemDetails.Where(e => e.IsDeleted == false).OrderBy(e => e.Name).ToList();
-
-            var itemList = new List<ItemDetailModel>();
-
-            foreach (var itemData in allItems)
-            {
-                var itemRecord = new ItemDetailModel();
-                itemRecord.Id = itemData.Id;
-                itemRecord.Name = itemData.Name;
-                itemRecord.Sku = itemData.Sku;
-                itemRecord.Price = itemData.Price;
-                itemRecord.Qty = itemData.Qty;
-                itemRecord.IsDeleted = false;
-                itemList.Add(itemRecord);
-            }
-
-            ItemDetils = itemList;
-
+            ItemDetils = new ItemDtoMap().Map(allItems);
             return Page();
         }
 

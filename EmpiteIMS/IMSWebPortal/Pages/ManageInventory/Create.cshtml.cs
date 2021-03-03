@@ -12,6 +12,7 @@ using IMSWebPortal.Data.Models.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using IMSWebPortal.Pages.Dtos;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 
 namespace IMSWebPortal.Pages.ManageInventory
 {
@@ -54,19 +55,14 @@ namespace IMSWebPortal.Pages.ManageInventory
                     StatusMessage = "Error: Duplicate SKU value. Item with SKU #" + Input.Sku + " already exist.";
                     return Page();
                 }
-
-                var item = new ItemDetail { Name = Input.Name, Sku = Input.Sku, Price = Input.Price, Qty = Input.Qty, IsDeleted = false };
-
+                Input.IsDeleted = false;
+                var item = new ItemDtoMap().Map(Input);
                 _context.ItemDetails.Add(item);
                 _context.SaveChanges();
-
                 _logger.LogInformation("New Item added.");
-
                 StatusMessage = "New item added successfully";
-
                 return RedirectToPage();
             }
-
             return Page();
         }
     }

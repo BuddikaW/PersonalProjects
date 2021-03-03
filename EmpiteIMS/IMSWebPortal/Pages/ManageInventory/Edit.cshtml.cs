@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using IMSWebPortal.Data.Models.Identity;
 using IMSWebPortal.Pages.Dtos;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 
 namespace IMSWebPortal.Pages.ManageInventory
 {
@@ -49,16 +50,7 @@ namespace IMSWebPortal.Pages.ManageInventory
             {
                 return NotFound();
             }
-
-            var itemModel = new ItemDetailModel();
-            itemModel.Id = item.Id;
-            itemModel.Name = item.Name;
-            itemModel.Sku = item.Sku;
-            itemModel.Price = item.Price;
-            itemModel.Qty = item.Qty;
-            itemModel.PrvSku = item.Sku;
-
-            Input = itemModel;
+            Input = new ItemDtoMap().Map(item);
             return Page();
         }
 

@@ -1,6 +1,7 @@
 ﻿using IMSWebPortal.Data.Models.Email;
 using IMSWebPortal.Data.Models.Identity;
 using IMSWebPortal.Data.Models.Inventory;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -12,11 +13,11 @@ namespace IMSWebPortal.Data
 {
     public class SeedHelper
     {
-        private static IDataProtector _protector;
+        private static IDataProtectionProvider _provider;
 
         public static async Task Initialize(ApplicationDbContext context, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IDataProtectionProvider provider)
         {
-            _protector = provider.CreateProtector("empite");
+            _provider = provider;
 
             context.Database.EnsureCreated();
 
@@ -58,8 +59,8 @@ namespace IMSWebPortal.Data
 
         public static async Task<bool> CreateUser(UserManager<AppUser> userManager, string email, string password, string firstName, string lastName, string role)
         {
-            firstName = Encript(firstName);
-            lastName = Encript(lastName);
+            firstName = new UserDtoMap(_provider).Encript(firstName);
+            lastName = new UserDtoMap(_provider).Encript(lastName);
             if (await userManager.FindByNameAsync(email) == null)
             {
                 var user = new AppUser
@@ -205,11 +206,6 @@ namespace IMSWebPortal.Data
             {
                 return false;
             }
-        }
-
-        public static String Encript(string input)
-        {
-            return _protector.Protect(input);
         }
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.DataProtection;
 using IMSWebPortal.Pages.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 
 namespace IMSWebPortal.Pages.ManageUser
 {
@@ -21,7 +22,7 @@ namespace IMSWebPortal.Pages.ManageUser
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<IndexModel> _logger;
-        private readonly IDataProtector _protector;
+        public readonly IDataProtectionProvider _provider;
 
         public IndexModel(ApplicationDbContext context,
             UserManager<AppUser> userManager,
@@ -31,7 +32,7 @@ namespace IMSWebPortal.Pages.ManageUser
             _context = context;
             _userManager = userManager;
             _logger = logger;
-            _protector = provider.CreateProtector("empite");
+            _provider = provider;
         }
 
         public string Username { get; set; }
@@ -41,11 +42,6 @@ namespace IMSWebPortal.Pages.ManageUser
 
         [BindProperty]
         public IList<UserDetailModel> UserDetails { get; set; }
-
-        public String Decript(string input)
-        {
-            return _protector.Unprotect(input);
-        }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -57,17 +53,7 @@ namespace IMSWebPortal.Pages.ManageUser
             var userName = await _userManager.GetUserNameAsync(user);
             Username = userName;
             var allUsers = _context.Users.Where(e => e.UserName != Username).OrderBy(e => e.IsEnabled).ToList();
-            var userList = new List<UserDetailModel>();
-            foreach (var userProfile in allUsers)
-            {
-                var userDetail = new UserDetailModel();
-                userDetail.Id = userProfile.Id;
-                userDetail.FirstName = Decript(userProfile.FirstName);
-                userDetail.LastName = Decript(userProfile.LastName);
-                userDetail.Username = userProfile.UserName;
-                userDetail.IsEnabled = userProfile.IsEnabled;
-                userList.Add(userDetail);
-            }
+            var userList = new UserDtoMap(_provider).Map(allUsers);
             UserDetails = userList;
             return Page();
         }
@@ -78,7 +64,7 @@ namespace IMSWebPortal.Pages.ManageUser
             {
                 foreach (var userData in UserDetails)
                 {
-                    var userName = userData.Username;
+                    var userName = userData.UserName;
                     var existingUser = _context.Users.Where(e => e.UserName == userName).FirstOrDefault();
                     if (existingUser == null)
                     {

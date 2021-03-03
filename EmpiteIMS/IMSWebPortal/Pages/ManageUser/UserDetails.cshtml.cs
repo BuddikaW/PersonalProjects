@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IMSWebPortal.Data.Models.Identity;
 using IMSWebPortal.Pages.Dtos;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +18,7 @@ namespace IMSWebPortal.Pages.ManageUser
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IDataProtector _protector;
+        public readonly IDataProtectionProvider _provider;
 
         public UserDetailsModel(
             UserManager<AppUser> userManager,
@@ -26,7 +27,7 @@ namespace IMSWebPortal.Pages.ManageUser
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _protector = provider.CreateProtector("empite");
+            _provider = provider;
         }
 
         public string Username { get; set; }
@@ -62,13 +63,13 @@ namespace IMSWebPortal.Pages.ManageUser
                 return Page();
             }
 
-            var firstName = Decript(user.FirstName);
-            var lastName = Decript(user.LastName);
+            var firstName = new UserDtoMap(_provider).Decript(user.FirstName);
+            var lastName = new UserDtoMap(_provider).Decript(user.LastName);
 
             if (Input.FirstName != firstName || Input.LastName != lastName)
             {
-                user.FirstName = Encript(Input.FirstName);
-                user.LastName = Encript(Input.LastName);
+                user.FirstName = new UserDtoMap(_provider).Encript(Input.FirstName);
+                user.LastName = new UserDtoMap(_provider).Encript(Input.LastName);
                 var setNameChange = await _userManager.UpdateAsync(user);
                 if (!setNameChange.Succeeded)
                 {
@@ -86,24 +87,7 @@ namespace IMSWebPortal.Pages.ManageUser
         {
             var userName = await _userManager.GetUserNameAsync(user);
             Username = userName;
-            var firstName = Decript(user.FirstName);
-            var lastName = Decript(user.LastName);
-            Input = new UserDetailModel
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                IsEnabled = user.IsEnabled
-            };
-        }
-
-        public String Decript(string input)
-        {
-            return _protector.Unprotect(input);
-        }
-
-        public String Encript(string input)
-        {
-            return _protector.Protect(input);
+            Input = new UserDtoMap(_provider).Map(user);
         }
     }
 }

@@ -20,11 +20,11 @@ namespace IMSWebPortal.Pages.Dtos
         public string LastName { get; set; }
 
         [Required]
-        [Display(Name = "Username")]
-        public string Username { get; set; }
+        [Display(Name = "User Name")]
+        public string UserName { get; set; }
 
         [Required]
-        [Display(Name = "Is Active")]
+        [Display(Name = "Active Status")]
         public bool IsEnabled { get; set; }
     }
 }

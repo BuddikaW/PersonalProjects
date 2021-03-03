@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.DataProtection;
+using IMSWebPortal.Pages.Dtos.DtoMapping;
 
 namespace IMSWebPortal.Areas.Identity.Pages.Account
 {
@@ -25,7 +26,7 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IDataProtector _protector;
+        private readonly IDataProtectionProvider _protector;
 
         public RegisterModel(
             UserManager<AppUser> userManager,
@@ -38,7 +39,7 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _protector = provider.CreateProtector("empite");
+            _protector = provider;
         }
 
         [BindProperty]
@@ -81,16 +82,6 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
-        public String Encript(string input)
-        {
-            return _protector.Protect(input);
-        }
-
-        public String Decript(string input)
-        {
-            return _protector.Unprotect(input);
-        }
-
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -98,8 +89,8 @@ namespace IMSWebPortal.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 //Encript User Details
-                var firstName = Encript(Input.FirstName);
-                var lastName = Encript(Input.LastName);
+                var firstName = new UserDtoMap(_protector).Encript(Input.FirstName);
+                var lastName = new UserDtoMap(_protector).Encript(Input.LastName);
 
                 var user = new AppUser { UserName = Input.Email, Email = Input.Email, FirstName = firstName, LastName = lastName, IsEnabled = true };
                 var result = await _userManager.CreateAsync(user, Input.Password);
