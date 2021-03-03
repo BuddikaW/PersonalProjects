@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire;
 using IMSWebPortal.Areas;
 using IMSWebPortal.Data;
 using IMSWebPortal.Data.Models.Identity;
@@ -67,13 +68,12 @@ namespace IMSWebPortal.Pages.ManageInventory
                         StatusMessage = "Error: Please add valid email addresses";
                         return Page();
                     }
-                    var emailList = recipientList.Split(',');
+                    var emailList = recipientList.Split(',').ToList();
                     var subject = "EmpiteIMS - Inventory Details";
                     var body = GenerateHtml();
-                    foreach (var email in emailList)
-                    {
-                        var result = new EmailClient(_context).SendEmail(body, email, subject);
-                    }
+
+                    BackgroundJob.Enqueue(()=> new EmailClient(_context).SendEmail(body, emailList, subject));
+
                     StatusMessage = "Email que added";
                 }
                 else
